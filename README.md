@@ -1,0 +1,1 @@
+<h2>Smart home project</h2>
