@@ -1,5 +1,6 @@
 package com.algrince.smarthome.services;
 
+import com.algrince.smarthome.enums.DeviceState;
 import com.algrince.smarthome.exceptions.ResourceNotFoundException;
 import com.algrince.smarthome.models.Device;
 import com.algrince.smarthome.repositories.DeviceRepository;
@@ -30,7 +31,25 @@ public class DeviceService {
     }
 
     @Transactional
-    public void save(Device device) {
+    public void addDevice(Device device) {
         deviceRepository.save(device);
+    }
+
+    @Transactional
+    public void switchDevice(Long deviceId) {
+        Device foundDevice = findById(deviceId);
+
+        DeviceState deviceState = foundDevice.getDeviceState();
+
+        if (deviceState == DeviceState.ON) {
+            foundDevice.setDeviceState(DeviceState.OFF);
+        } else if (deviceState == DeviceState.OFF){
+            foundDevice.setDeviceState(DeviceState.ON);
+        } else {
+//            exception?
+            System.out.println("Cannot change the device status");
+        }
+
+        addDevice(foundDevice);
     }
 }

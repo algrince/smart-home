@@ -21,12 +21,14 @@ public class DeviceController {
 
     @GetMapping("all")
     public List<DeviceDTO> getDevicesList() {
+
         List<Device> devices = deviceService.findAll();
+
         return dtoMapper.mapList(devices, DeviceDTO.class);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<Object> getDevice(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getDevice(@PathVariable("id") Long id) {
 
         Device foundDevice = deviceService.findById(id);
         DeviceDTO foundDeviceDTO = dtoMapper.mapClass(foundDevice, DeviceDTO.class);
@@ -35,35 +37,34 @@ public class DeviceController {
     }
 
     @PostMapping
-    public ResponseEntity<Object> addDevice(@RequestBody DeviceDTO deviceDTO) {
+    public ResponseEntity<?> addDevice(@RequestBody DeviceDTO deviceDTO) {
 
         Device device = dtoMapper.mapClass(deviceDTO, Device.class);
-        device.setOn(false);
+        deviceService.addDevice(device);
 
-        deviceService.save(device);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @PutMapping("{id}/switch")
-    public ResponseEntity<Object> switchDevice(@PathVariable("id") Long id) {
-        Device foundDevice = deviceService.findById(id);
-        boolean deviceState = foundDevice.isOn();
-        foundDevice.setOn(!deviceState);
-        deviceService.save(foundDevice);
+    @PatchMapping("{id}/switch")
+    public ResponseEntity<?> switchDevice(@PathVariable("id") Long deviceId) {
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        deviceService.switchDevice(deviceId);
+
+        return ResponseEntity.ok().build();
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Object> updateDevice(
+    public ResponseEntity<?> updateDevice(
         @PathVariable("id") Long id,
         @RequestBody DeviceDTO deviceDTO) {
-
+// move to service?
         Device foundDevice = deviceService.findById(id);
 
         dtoMapper.mapProperties(deviceDTO, foundDevice);
-        deviceService.save(foundDevice);
+        deviceService.addDevice(foundDevice);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
+
+//    add delete
 }

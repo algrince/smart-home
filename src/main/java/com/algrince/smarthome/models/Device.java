@@ -1,5 +1,6 @@
 package com.algrince.smarthome.models;
 
+import com.algrince.smarthome.enums.DeviceState;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,6 @@ public class Device {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "is_on")
-    private boolean isOn;
+    @Column(name = "state")
+    private DeviceState deviceState;
 }
