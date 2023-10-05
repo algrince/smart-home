@@ -24,10 +24,10 @@ public class DeviceService {
     }
 
     @Transactional(readOnly = true)
-    public Device findById(Long id) {
-        Optional<Device> foundDevice = deviceRepository.findById(id);
+    public Device findById(Long deviceId) {
+        Optional<Device> foundDevice = deviceRepository.findById(deviceId);
         return foundDevice.orElseThrow(()
-            -> new ResourceNotFoundException("Device not found with id: " + id));
+            -> new ResourceNotFoundException("Device not found with id: " + deviceId));
     }
 
     @Transactional
@@ -51,5 +51,11 @@ public class DeviceService {
         }
 
         addDevice(foundDevice);
+    }
+
+    @Transactional
+    public void deleteDevice(Long deviceId) {
+
+        deviceRepository.deleteById(deviceId);
     }
 }

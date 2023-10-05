@@ -55,10 +55,10 @@ public class DeviceController {
 
     @PutMapping("{id}")
     public ResponseEntity<?> updateDevice(
-        @PathVariable("id") Long id,
+        @PathVariable("id") Long deviceId,
         @RequestBody DeviceDTO deviceDTO) {
 // move to service?
-        Device foundDevice = deviceService.findById(id);
+        Device foundDevice = deviceService.findById(deviceId);
 
         dtoMapper.mapProperties(deviceDTO, foundDevice);
         deviceService.addDevice(foundDevice);
@@ -66,5 +66,12 @@ public class DeviceController {
         return ResponseEntity.ok().build();
     }
 
-//    add delete
+    @DeleteMapping("{id}")
+    public ResponseEntity<?> deleteDevice(@PathVariable("id") Long deviceId) {
+
+        deviceService.deleteDevice(deviceId);
+
+        return ResponseEntity.ok().build();
+    }
+
 }
