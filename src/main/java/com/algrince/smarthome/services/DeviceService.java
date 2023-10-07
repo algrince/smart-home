@@ -5,6 +5,7 @@ import com.algrince.smarthome.exceptions.ResourceNotFoundException;
 import com.algrince.smarthome.models.Device;
 import com.algrince.smarthome.repositories.DeviceRepository;
 import com.algrince.smarthome.utils.DataMapper;
+import com.algrince.smarthome.validators.DeviceValidator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ public class DeviceService {
 
     private final DeviceRepository deviceRepository;
     private final DataMapper dataMapper;
+    private final DeviceValidator deviceValidator;
 
     @Transactional(readOnly = true)
     public List<Device> findAll() {
@@ -34,6 +36,7 @@ public class DeviceService {
 
     @Transactional
     public void create(Device device) {
+        deviceValidator.validate(device);
         deviceRepository.save(device);
     }
 
