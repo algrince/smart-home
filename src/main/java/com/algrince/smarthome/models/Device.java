@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "devices")
 @NoArgsConstructor
@@ -23,4 +25,13 @@ public class Device {
 
     @Column(name = "state")
     private DeviceState deviceState;
+
+    @ManyToMany
+    @JoinTable(
+            name = "device_supported_types",
+            joinColumns = @JoinColumn(name = "devices_id"),
+            inverseJoinColumns = @JoinColumn(name = "registered_types_id")
+    )
+    private List<DataType> dataTypes;
+
 }

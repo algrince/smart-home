@@ -4,6 +4,7 @@ import com.algrince.smarthome.enums.DeviceState;
 import com.algrince.smarthome.exceptions.ResourceNotFoundException;
 import com.algrince.smarthome.models.Device;
 import com.algrince.smarthome.repositories.DeviceRepository;
+import com.algrince.smarthome.utils.DataMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,7 @@ import java.util.Optional;
 public class DeviceService {
 
     private final DeviceRepository deviceRepository;
+    private final DataMapper dataMapper;
 
     @Transactional(readOnly = true)
     public List<Device> findAll() {
@@ -31,30 +33,34 @@ public class DeviceService {
     }
 
     @Transactional
-    public void addDevice(Device device) {
+    public void create(Device device) {
         deviceRepository.save(device);
     }
 
     @Transactional
-    public void switchDevice(Long deviceId) {
+    public void switchState(Long deviceId) {
         Device foundDevice = findById(deviceId);
 
         DeviceState deviceState = foundDevice.getDeviceState();
 
-        if (deviceState == DeviceState.ON) {
-            foundDevice.setDeviceState(DeviceState.OFF);
-        } else if (deviceState == DeviceState.OFF){
-            foundDevice.setDeviceState(DeviceState.ON);
-        } else {
-//            exception?
-            System.out.println("Cannot change the device status");
-        }
+        switch (deviceState) {
+            case ON -> foundDevice.setDeviceState(DeviceState.OFF);
+            case OFF -> foundDevice.setDeviceState(DeviceState.ON);
+            default ->  System.out.println("Cannot change the device status");
 
-        addDevice(foundDevice);
+        }
+        deviceRepository.save(foundDevice);
     }
 
     @Transactional
-    public void deleteDevice(Long deviceId) {
+    public void update(Long deviceId, Device device) {
+        Device foundDevice = findById(deviceId);
+        dataMapper.mapProperties(device, foundDevice);
+        deviceRepository.save(foundDevice);
+    }
+
+    @Transactional
+    public void delete(Long deviceId) {
 
         deviceRepository.deleteById(deviceId);
     }

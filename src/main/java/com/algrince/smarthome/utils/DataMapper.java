@@ -13,7 +13,7 @@ import java.util.List;
 
 @Component
 @RequiredArgsConstructor
-public class DTOMapper {
+public class DataMapper {
     private final ModelMapper modelMapper;
 
     public <S, T> List<T> mapList(List<S> source, Class<T> targetClass) {

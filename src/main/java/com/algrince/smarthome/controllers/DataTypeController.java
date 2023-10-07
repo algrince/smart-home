@@ -3,7 +3,7 @@ package com.algrince.smarthome.controllers;
 import com.algrince.smarthome.dto.DataTypeDTO;
 import com.algrince.smarthome.models.DataType;
 import com.algrince.smarthome.services.DataTypeService;
-import com.algrince.smarthome.utils.DTOMapper;
+import com.algrince.smarthome.utils.DataMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,21 +17,21 @@ import java.util.List;
 public class DataTypeController {
 
     private final DataTypeService dataTypeService;
-    private final DTOMapper dtoMapper;
+    private final DataMapper dataMapper;
 
     @GetMapping("all")
     public List<DataTypeDTO> getDataTypes() {
 
         List<DataType> dataTypes =  dataTypeService.findAll();
 
-        return dtoMapper.mapList(dataTypes, DataTypeDTO.class);
+        return dataMapper.mapList(dataTypes, DataTypeDTO.class);
     }
 
     @GetMapping("{id}")
     public ResponseEntity<?> getDataType(@PathVariable("id") Long dataTypeId) {
 
         DataType foundDataType = dataTypeService.findById(dataTypeId);
-        DataTypeDTO foundDataTypeDTO = dtoMapper.mapClass(foundDataType, DataTypeDTO.class);
+        DataTypeDTO foundDataTypeDTO = dataMapper.mapClass(foundDataType, DataTypeDTO.class);
 
         return ResponseEntity.ok().body(foundDataTypeDTO);
     }
@@ -39,7 +39,7 @@ public class DataTypeController {
     @PostMapping
     public ResponseEntity<?> addDataType(@RequestBody DataTypeDTO dataTypeDTO) {
 
-        DataType dataType = dtoMapper.mapClass(dataTypeDTO, DataType.class);
+        DataType dataType = dataMapper.mapClass(dataTypeDTO, DataType.class);
         dataTypeService.addDataType(dataType);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
@@ -52,7 +52,7 @@ public class DataTypeController {
 
         DataType foundDataType = dataTypeService.findById(dataTypeId);
 
-        dtoMapper.mapProperties(dataTypeDTO,foundDataType);
+        dataMapper.mapProperties(dataTypeDTO,foundDataType);
         dataTypeService.addDataType(foundDataType);
 
         return ResponseEntity.ok().build();

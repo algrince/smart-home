@@ -5,6 +5,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "registered_types")
 @NoArgsConstructor
@@ -19,4 +21,7 @@ public class DataType {
 
     @Column(name = "name")
     private String name;
+
+    @ManyToMany(mappedBy = "dataTypes")
+    private List<Device> devices;
 }

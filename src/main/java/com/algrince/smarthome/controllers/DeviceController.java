@@ -3,7 +3,7 @@ package com.algrince.smarthome.controllers;
 import com.algrince.smarthome.dto.DeviceDTO;
 import com.algrince.smarthome.models.Device;
 import com.algrince.smarthome.services.DeviceService;
-import com.algrince.smarthome.utils.DTOMapper;
+import com.algrince.smarthome.utils.DataMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,51 +17,54 @@ import java.util.List;
 public class DeviceController {
 
     private final DeviceService deviceService;
-    private final DTOMapper dtoMapper;
+    private final DataMapper dataMapper;
 
-    @GetMapping("all")
-    public List<DeviceDTO> getDevicesList() {
+
+//    Delete all from getmapping
+//    change names of methods by restful
+    @GetMapping
+    public List<DeviceDTO> getAll() {
 
         List<Device> devices = deviceService.findAll();
 
-        return dtoMapper.mapList(devices, DeviceDTO.class);
+        return dataMapper.mapList(devices, DeviceDTO.class);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getDevice(@PathVariable("id") Long id) {
+    public ResponseEntity<?> getById(@PathVariable("id") Long id) {
 
         Device foundDevice = deviceService.findById(id);
-        DeviceDTO foundDeviceDTO = dtoMapper.mapClass(foundDevice, DeviceDTO.class);
+        DeviceDTO foundDeviceDTO = dataMapper.mapClass(foundDevice, DeviceDTO.class);
 
         return ResponseEntity.ok().body(foundDeviceDTO);
     }
 
     @PostMapping
-    public ResponseEntity<?> addDevice(@RequestBody DeviceDTO deviceDTO) {
+    public ResponseEntity<?> create(@RequestBody DeviceDTO deviceDTO) {
 
-        Device device = dtoMapper.mapClass(deviceDTO, Device.class);
-        deviceService.addDevice(device);
+        Device device = dataMapper.mapClass(deviceDTO, Device.class);
+        deviceService.create(device);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PatchMapping("{id}/switch")
-    public ResponseEntity<?> switchDevice(@PathVariable("id") Long deviceId) {
+    public ResponseEntity<?> switchState(@PathVariable("id") Long deviceId) {
 
-        deviceService.switchDevice(deviceId);
+        deviceService.switchState(deviceId);
 
         return ResponseEntity.ok().build();
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> updateDevice(
+    public ResponseEntity<?> update(
         @PathVariable("id") Long deviceId,
         @RequestBody DeviceDTO deviceDTO) {
-// move to service?
-        Device foundDevice = deviceService.findById(deviceId);
 
-        dtoMapper.mapProperties(deviceDTO, foundDevice);
-        deviceService.addDevice(foundDevice);
+//        Change mapper!!
+        Device newDevice = new Device();
+        dataMapper.mapProperties(deviceDTO, newDevice);
+        deviceService.update(deviceId, newDevice);
 
         return ResponseEntity.ok().build();
     }
@@ -69,7 +72,7 @@ public class DeviceController {
     @DeleteMapping("{id}")
     public ResponseEntity<?> deleteDevice(@PathVariable("id") Long deviceId) {
 
-        deviceService.deleteDevice(deviceId);
+        deviceService.delete(deviceId);
 
         return ResponseEntity.ok().build();
     }
