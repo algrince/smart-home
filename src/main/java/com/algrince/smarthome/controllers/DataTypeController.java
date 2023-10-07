@@ -4,7 +4,6 @@ import com.algrince.smarthome.dto.DataTypeDTO;
 import com.algrince.smarthome.models.DataType;
 import com.algrince.smarthome.services.DataTypeService;
 import com.algrince.smarthome.utils.DTOMapper;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,14 +20,14 @@ public class DataTypeController {
     private final DTOMapper dtoMapper;
 
     @GetMapping("all")
-    public List<DataTypeDTO> getDataTypesList() {
+    public List<DataTypeDTO> getDataTypes() {
 
         List<DataType> dataTypes =  dataTypeService.findAll();
 
         return dtoMapper.mapList(dataTypes, DataTypeDTO.class);
     }
 
-    @GetMapping("{id")
+    @GetMapping("{id}")
     public ResponseEntity<?> getDataType(@PathVariable("id") Long dataTypeId) {
 
         DataType foundDataType = dataTypeService.findById(dataTypeId);
