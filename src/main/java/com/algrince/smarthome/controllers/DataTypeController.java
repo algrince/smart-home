@@ -19,8 +19,8 @@ public class DataTypeController {
     private final DataTypeService dataTypeService;
     private final DataMapper dataMapper;
 
-    @GetMapping("all")
-    public List<DataTypeDTO> getDataTypes() {
+    @GetMapping
+    public List<DataTypeDTO> getAll() {
 
         List<DataType> dataTypes =  dataTypeService.findAll();
 
@@ -28,7 +28,7 @@ public class DataTypeController {
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<?> getDataType(@PathVariable("id") Long dataTypeId) {
+    public ResponseEntity<?> getById(@PathVariable("id") Long dataTypeId) {
 
         DataType foundDataType = dataTypeService.findById(dataTypeId);
         DataTypeDTO foundDataTypeDTO = dataMapper.mapClass(foundDataType, DataTypeDTO.class);
@@ -37,31 +37,29 @@ public class DataTypeController {
     }
 
     @PostMapping
-    public ResponseEntity<?> addDataType(@RequestBody DataTypeDTO dataTypeDTO) {
+    public ResponseEntity<?> create(@RequestBody DataTypeDTO dataTypeDTO) {
 
         DataType dataType = dataMapper.mapClass(dataTypeDTO, DataType.class);
-        dataTypeService.addDataType(dataType);
+        dataTypeService.create(dataType);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<?> updateDataType(
+    public ResponseEntity<?> update(
             @PathVariable("id") Long dataTypeId,
             @RequestBody DataTypeDTO dataTypeDTO) {
 
-        DataType foundDataType = dataTypeService.findById(dataTypeId);
-
-        dataMapper.mapProperties(dataTypeDTO,foundDataType);
-        dataTypeService.addDataType(foundDataType);
+        DataType updatedDataType = dataMapper.mapClass(dataTypeDTO, DataType.class);
+        dataTypeService.update(dataTypeId, updatedDataType);
 
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteDataType(@PathVariable("id") Long dataTypeId) {
+    public ResponseEntity<?> delete(@PathVariable("id") Long dataTypeId) {
 
-        dataTypeService.deleteDataType(dataTypeId);
+        dataTypeService.delete(dataTypeId);
 
         return ResponseEntity.ok().build();
     }

@@ -3,6 +3,7 @@ package com.algrince.smarthome.services;
 import com.algrince.smarthome.exceptions.ResourceNotFoundException;
 import com.algrince.smarthome.models.DataType;
 import com.algrince.smarthome.repositories.DataTypeRepository;
+import com.algrince.smarthome.utils.DataMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +16,7 @@ import java.util.Optional;
 public class DataTypeService {
 
     private final DataTypeRepository dataTypeRepository;
+    private final DataMapper dataMapper;
 
     @Transactional(readOnly = true)
     public List<DataType> findAll() {
@@ -30,12 +32,19 @@ public class DataTypeService {
     }
 
     @Transactional
-    public void addDataType(DataType dataType) {
+    public void create(DataType dataType) {
         dataTypeRepository.save(dataType);
     }
 
     @Transactional
-    public void deleteDataType(Long dataTypeId) {
+    public void update(Long dataTypeId, DataType dataType) {
+        DataType foundDataType = findById(dataTypeId);
+        dataMapper.mapProperties(dataType, foundDataType);
+        dataTypeRepository.save(foundDataType);
+    }
+
+    @Transactional
+    public void delete(Long dataTypeId) {
 
         dataTypeRepository.deleteById(dataTypeId);
     }

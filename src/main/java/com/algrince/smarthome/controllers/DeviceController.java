@@ -20,8 +20,6 @@ public class DeviceController {
     private final DataMapper dataMapper;
 
 
-//    Delete all from getmapping
-//    change names of methods by restful
     @GetMapping
     public List<DeviceDTO> getAll() {
 
@@ -61,16 +59,14 @@ public class DeviceController {
         @PathVariable("id") Long deviceId,
         @RequestBody DeviceDTO deviceDTO) {
 
-//        Change mapper!!
-        Device newDevice = new Device();
-        dataMapper.mapProperties(deviceDTO, newDevice);
-        deviceService.update(deviceId, newDevice);
+        Device updatedDevice = dataMapper.mapClass(deviceDTO, Device.class);
+        deviceService.update(deviceId, updatedDevice);
 
         return ResponseEntity.ok().build();
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<?> deleteDevice(@PathVariable("id") Long deviceId) {
+    public ResponseEntity<?> delete(@PathVariable("id") Long deviceId) {
 
         deviceService.delete(deviceId);
 
