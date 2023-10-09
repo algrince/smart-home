@@ -57,7 +57,11 @@ public class DeviceService {
 
     @Transactional
     public void update(Long deviceId, Device device) {
+        deviceValidator.validate(device);
+
         Device foundDevice = findById(deviceId);
+        deviceValidator.validateObjectById(foundDevice, device);
+
         dataMapper.mapProperties(device, foundDevice);
         deviceRepository.save(foundDevice);
     }
