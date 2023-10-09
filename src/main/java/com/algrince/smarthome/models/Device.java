@@ -2,6 +2,7 @@ package com.algrince.smarthome.models;
 
 import com.algrince.smarthome.enums.DeviceState;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,7 @@ import java.util.List;
 @Entity
 @Table(name = "devices")
 @NoArgsConstructor
+@AllArgsConstructor
 @Setter
 @Getter
 public class Device {

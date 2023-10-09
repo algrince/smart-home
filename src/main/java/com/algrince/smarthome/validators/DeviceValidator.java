@@ -16,7 +16,7 @@ public class DeviceValidator {
             throw new InvalidFormException("Device id cannot be zero");
         }
 
-        if (device.getId() == null || device.getName() == null || device.getDeviceState() == null) {
+        if (device.getName() == null || device.getDeviceState() == null) {
             throw new InvalidFormException("All data should be filled");
         }
     }
