@@ -12,9 +12,9 @@ public class DeviceValidator {
             throw new InvalidFormException("Name should not be empty");
         }
 
-        if (device.getId() == 0) {
-            throw new InvalidFormException("Device id cannot be zero");
-        }
+//        if (device.getId() == 0) {
+//            throw new InvalidFormException("Device id cannot be zero");
+//        }
 
         if (device.getName() == null || device.getDeviceState() == null) {
             throw new InvalidFormException("All data should be filled");

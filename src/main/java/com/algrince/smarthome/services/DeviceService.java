@@ -1,5 +1,6 @@
 package com.algrince.smarthome.services;
 
+import com.algrince.smarthome.annotations.PIDInject;
 import com.algrince.smarthome.enums.DeviceState;
 import com.algrince.smarthome.exceptions.ResourceNotFoundException;
 import com.algrince.smarthome.models.Device;
@@ -20,6 +21,8 @@ public class DeviceService {
     private final DeviceRepository deviceRepository;
     private final DataMapper dataMapper;
     private final DeviceValidator deviceValidator;
+    @PIDInject
+    private long PID;
 
     @Transactional(readOnly = true)
     public List<Device> findAll() {

@@ -6,9 +6,13 @@ import com.algrince.smarthome.models.DataType;
 import com.algrince.smarthome.models.Device;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -52,23 +56,32 @@ class DeviceValidatorTest {
                 () -> deviceValidator.validate(device));
     }
 
-    @Test
+    @ParameterizedTest
+    @MethodSource("provideDevices")
     @DisplayName("Null exception")
-    void validateNotNull() {
+    void validateNotNull(Device device) {
 
-        List<DataType> dataTypes = new ArrayList<DataType>();
 //        Device nullIdDevice = new Device(null, "Phone", DeviceState.ON, dataTypes);
-        Device nullNameDevice = new Device(1L, null, DeviceState.ON, dataTypes);
-        Device nullStateDevice = new Device(1L, "Phone", null, dataTypes);
+
 
         DeviceValidator deviceValidator = new DeviceValidator();
 
 //        assertThrowsExactly(InvalidFormException.class,
 //                () -> deviceValidator.validate(nullIdDevice));
         assertThrowsExactly(InvalidFormException.class,
-                () -> deviceValidator.validate(nullNameDevice));
-        assertThrowsExactly(InvalidFormException.class,
-                () -> deviceValidator.validate(nullStateDevice));
+                () -> deviceValidator.validate(device));
+
+    }
+
+    static Stream<Arguments> provideDevices() {
+        List<Arguments> arguments = new ArrayList<>();
+
+        List<DataType> dataTypes = new ArrayList<DataType>();
+
+        arguments.add(Arguments.of(new Device(1L, null, DeviceState.ON, dataTypes)));
+        arguments.add(Arguments.of(new Device(1L, "Phone", null, dataTypes)));
+
+        return arguments.stream();
     }
 
 
