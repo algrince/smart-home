@@ -1,5 +1,6 @@
 package com.algrince.smarthome.configs;
 
+import liquibase.integration.spring.SpringLiquibase;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
@@ -37,4 +38,13 @@ public class TestDBConfig {
 
         return dataSourceBuilder.build();
     }
+
+    @Bean
+    public SpringLiquibase liquibase() {
+        SpringLiquibase liquibase = new SpringLiquibase();
+        liquibase.setDataSource(getDataSource());
+        liquibase.setChangeLog("classpath:db/changelogs/main-changelog.yaml");
+        return liquibase;
+    }
+
 }

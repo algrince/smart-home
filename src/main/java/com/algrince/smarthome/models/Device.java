@@ -26,6 +26,7 @@ public class Device {
     private String name;
 
     @Column(name = "state")
+    @Enumerated(EnumType.STRING)
     private DeviceState deviceState;
 
     @ManyToMany

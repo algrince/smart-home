@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: db/changelogs/db-setup-changelog.yaml
+  - include:
+      file: db/changelogs/populate-changelog.yaml

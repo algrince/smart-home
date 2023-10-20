@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: algrince
+      changes:
+        - insert:
+            tableName: devices
+            columns:
+              - column:
+                  name: id
+                  value: "1"
+              - column:
+                  name: name
+                  value: "Air conditioner LG"
+              - column:
+                  name: state
+                  value: "ON"
+        - insert:
+            tableName: devices
+            columns:
+              - column:
+                  name: id
+                  value: "2"
+              - column:
+                  name: name
+                  value: "Boiler Lasko"
+              - column:
+                  name: state
+                  value: "OFF"
+        - insert:
+            tableName: devices
+            columns:
+              - column:
+                  name: id
+                  value: "3"
+              - column:
+                  name: name
+                  value: "Light switch"
+              - column:
+                  name: state
+                  value: "ON"
+        - insert:
+            tableName: devices
+            columns:
+              - column:
+                  name: id
+                  value: "4"
+              - column:
+                  name: name
+                  value: "Smart curtain SmartBot"
+              - column:
+                  name: state
+                  value: "OFF"
+        - insert:
+            tableName: devices
+            columns:
+              - column:
+                  name: id
+                  value: "5"
+              - column:
+                  name: name
+                  value: "Vacuum cleaner Roomba"
+              - column:
+                  name: state
+                  value: "ON"
