@@ -20,6 +20,66 @@ databaseChangeLog:
                     nullable: false
               - column:
                   name: state
-                  type: enum('ON', 'OFF', 'DANGER')
+                  type: enum('ON', 'OFF', 'WARNING')
                   constraints:
                     nullable: false
+        - createTable:
+            tableName: registered_types
+            columns:
+              - column:
+                  name: id
+                  type: bigint(8)
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: varchar(45)
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: device_supported_types
+            columns:
+              - column:
+                  name: id
+                  type: bigint(8)
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: devices_id
+                  type: bigint(8)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: registered_types_id
+                  type: bigint(8)
+                  constraints:
+                    nullable: false
+            constraints:
+              primaryKey:
+                columnNames: id, devices_id, registered_types_id
+              foreignKeyConstraints:
+                - foreignKeyName: fk_device_supported_types_devices
+                  referencedTableName: devices
+                  referencedColumnNames: id
+                  onDelete: NO_ACTION
+                  onUpdate: NO_ACTION
+                - foreignKeyName: fk_device_supported_types_registered_types1
+                  referencedTableName: registered_types
+                  referencedColumnNames: id
+                  onDelete: NO_ACTION
+                  onUpdate: NO_ACTION
+            indexes:
+              - indexName: fk_device_supported_types_devices_idx
+                columns:
+                  - column:
+                      name: devices_id
+                      direction: ASC
+              - indexName: fk_device_supported_types_registered_types1_idx
+                columns:
+                  - column:
+                      name: registered_types_id
+                      direction: ASC

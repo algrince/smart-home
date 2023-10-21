@@ -63,3 +63,24 @@ databaseChangeLog:
               - column:
                   name: state
                   value: "ON"
+        - insert:
+            tableName: registered_types
+            columns:
+              - column:
+                  name: id
+                  value: "1"
+              - column:
+                  name: name
+                  value: "temperature"
+        - insert:
+            tableName: device_supported_types
+            columns:
+              - column:
+                  name: id
+                  value: "1"
+              - column:
+                  name: devices_id
+                  value: "1"
+              - column:
+                  name: registered_types_id
+                  value: "1"

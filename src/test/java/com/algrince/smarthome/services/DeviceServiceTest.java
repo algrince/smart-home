@@ -2,12 +2,15 @@ package com.algrince.smarthome.services;
 
 import com.algrince.smarthome.configs.TestDBConfig;
 import com.algrince.smarthome.enums.DeviceState;
+import com.algrince.smarthome.exceptions.InvalidFormException;
+import com.algrince.smarthome.exceptions.ResourceNotFoundException;
 import com.algrince.smarthome.models.DataType;
 import com.algrince.smarthome.models.Device;
 import com.algrince.smarthome.repositories.DeviceRepository;
 import com.algrince.smarthome.utils.DataMapper;
 import com.algrince.smarthome.validators.DeviceValidator;
 import org.junit.Before;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
@@ -33,6 +36,7 @@ class DeviceServiceTest {
 
     @Test
     @Transactional
+    @DisplayName("Test findAll() method")
     void findAll() {
 
         DeviceService deviceService = new DeviceService(
@@ -49,6 +53,22 @@ class DeviceServiceTest {
 
     @Test
     @Transactional
+    @DisplayName("Test findById() method")
+    void findById() {
+
+        DeviceService deviceService = new DeviceService(
+                deviceRepository,
+                mock(DataMapper.class),
+                mock(DeviceValidator.class));
+
+        assertDoesNotThrow(() -> deviceService.findById(1L));
+        assertThrowsExactly(ResourceNotFoundException.class,
+                () -> deviceService.findById(111L));
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Test create() method")
     void create() {
 //        DeviceRepository deviceRepository = mock(DeviceRepository.class);
 
@@ -72,6 +92,33 @@ class DeviceServiceTest {
         Device savedDevice = deviceRepository.findById(device.getId()).orElse(null);
         assertTrue(new ReflectionEquals(savedDevice).matches(device));
 
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("Test update() method")
+    void update() {
+
+        DeviceValidator deviceValidator = spy(DeviceValidator.class);
+
+        DeviceService deviceService = new DeviceService(
+                deviceRepository,
+                mock(DataMapper.class),
+                deviceValidator);
+
+        List<DataType> dataTypes = new ArrayList<DataType>();
+
+        Device deviceToUpdate = new Device(1L, "Phone", DeviceState.ON, dataTypes);
+        Long deviceIdToUpdate = deviceToUpdate.getId();
+
+        assertDoesNotThrow(() -> deviceService.update(deviceIdToUpdate, deviceToUpdate));
+
+        Device savedDevice = deviceRepository.findById(deviceIdToUpdate).orElse(null);
+        assertTrue(new ReflectionEquals(savedDevice).matches(deviceToUpdate));
+
+        Long wrongId = 30L;
+        assertThrowsExactly(InvalidFormException.class,
+                () -> deviceService.update(wrongId, deviceToUpdate));
     }
 
 }
