@@ -72,6 +72,9 @@ public class DeviceService {
     @Transactional
     public void delete(Long deviceId) {
 
-        deviceRepository.deleteById(deviceId);
+        Device foundDevice = findById(deviceId);
+        deviceRepository.delete(foundDevice);
+
+//        deviceRepository.deleteById(deviceId);
     }
 }

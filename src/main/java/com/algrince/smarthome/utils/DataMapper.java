@@ -16,6 +16,7 @@ import java.util.List;
 public class DataMapper {
     private final ModelMapper modelMapper;
 
+
     public <S, T> List<T> mapList(List<S> source, Class<T> targetClass) {
         return source
                 .stream()
@@ -33,6 +34,7 @@ public class DataMapper {
 
 
     public <S, T> void mapProperties (S sourceClass, T targetClass) {
+        modelMapper.getConfiguration().setCollectionsMergeEnabled(false);
         modelMapper.map(sourceClass, targetClass);
     }
 

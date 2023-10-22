@@ -1,5 +1,6 @@
 package com.algrince.smarthome.controllers;
 
+import com.algrince.smarthome.annotations.Profiler;
 import com.algrince.smarthome.dto.DeviceDTO;
 import com.algrince.smarthome.models.Device;
 import com.algrince.smarthome.services.DeviceService;
@@ -21,6 +22,7 @@ public class DeviceController {
 
 
     @GetMapping
+    @Profiler
     public List<DeviceDTO> getAll() {
 
         List<Device> devices = deviceService.findAll();

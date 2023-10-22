@@ -14,6 +14,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.internal.matchers.apachecommons.ReflectionEquals;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ContextConfiguration;
@@ -101,9 +102,11 @@ class DeviceServiceTest {
 
         DeviceValidator deviceValidator = spy(DeviceValidator.class);
 
+        DataMapper dataMapper = new DataMapper(spy(ModelMapper.class));
+
         DeviceService deviceService = new DeviceService(
                 deviceRepository,
-                mock(DataMapper.class),
+                dataMapper,
                 deviceValidator);
 
         List<DataType> dataTypes = new ArrayList<DataType>();
@@ -114,11 +117,34 @@ class DeviceServiceTest {
         assertDoesNotThrow(() -> deviceService.update(deviceIdToUpdate, deviceToUpdate));
 
         Device savedDevice = deviceRepository.findById(deviceIdToUpdate).orElse(null);
+
         assertTrue(new ReflectionEquals(savedDevice).matches(deviceToUpdate));
 
-        Long wrongId = 30L;
+        Long wrongId = 3L;
         assertThrowsExactly(InvalidFormException.class,
                 () -> deviceService.update(wrongId, deviceToUpdate));
+    }
+
+
+    @Test
+    @Transactional
+    @DisplayName("Test delete() method")
+    void delete() {
+
+        DeviceService deviceService = new DeviceService(
+                deviceRepository,
+                mock(DataMapper.class),
+                mock(DeviceValidator.class));
+
+        List<Device> devicesBefore = deviceRepository.findAll();
+        assertDoesNotThrow(() -> deviceService.delete(1L));
+        List<Device> devicesAfter = deviceRepository.findAll();
+
+        assertEquals(devicesBefore.size() - 1, devicesAfter.size());
+
+        assertThrowsExactly(ResourceNotFoundException.class,
+                () -> deviceService.delete(100L));
+
     }
 
 }

@@ -6,12 +6,14 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
 
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 
 import javax.sql.DataSource;
 
 @TestConfiguration
+@EnableTransactionManagement
 public class TestDBConfig {
     @Container
     static MySQLContainer<?> container;
@@ -30,8 +32,8 @@ public class TestDBConfig {
 
         var dataSourceBuilder = DataSourceBuilder.create();
 
-        dataSourceBuilder.driverClassName("com.mysql.cj.jdbc.Driver");
-        dataSourceBuilder.url("jdbc:mysql://%s:%s/smart-home"
+        dataSourceBuilder.driverClassName("net.sf.log4jdbc.sql.jdbcapi.DriverSpy");
+        dataSourceBuilder.url("jdbc:log4jdbc:mysql://%s:%s/smart-home"
                 .formatted(container.getHost(), container.getMappedPort(3306)));
         dataSourceBuilder.username("root");
         dataSourceBuilder.password("root");
